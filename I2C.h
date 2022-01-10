@@ -4,9 +4,9 @@
 
 // Define i2c pins
 #define SDA			RA4				// Data pin for i2c
-#define SCK			RA3				// Clock pin for i2c
+#define SCK			RB0				// Clock pin for i2c
 #define SDA_DIR		TRISA4			// Data pin direction
-#define SCK_DIR		TRISA3			// Clock pin direction
+#define SCK_DIR		TRISB0			// Clock pin direction
 
 // Define i2c speed
 #define I2C_SPEED	10				// kbps 

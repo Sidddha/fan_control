@@ -101,7 +101,7 @@ void tm1637DisplayContent(unsigned char content[4]);
 
 /* Display a decimal number (-999..9999) on the segments
  * displaying dots(1) or not(0). */
-void tm1637DisplayDecimal(uint8_t number, _Bool dots);
+void tm1637DisplayDecimal(char number, _Bool dots);
 
 
 /* Set the display state on(1) or off(0). */

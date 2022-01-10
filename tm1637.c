@@ -67,7 +67,7 @@ void SetDisplay(unsigned char brightness, _Bool state)
     Write_Command(reverseBits(CS_DISPLAY | brightness | state << BIT_DSS));
 }
 
-void tm1637DisplayDecimal(uint8_t number, _Bool dots)
+void tm1637DisplayDecimal(char number, _Bool dots)
 {
     unsigned char bytes_arry[5] = {0};
     unsigned char digit;
@@ -77,25 +77,26 @@ void tm1637DisplayDecimal(uint8_t number, _Bool dots)
     else if (number < -99)
         number = -99;
 
-    bytes_arry[0] = reverseBits(CS_ADDRESS);
-    bytes_arry[1] = _empty;
+//    bytes_arry[0] = reverseBits(CS_ADDRESS);
+    bytes_arry[0] = _empty;
 
     if (number < 0) {
-        bytes_arry[2] = reverseBits(_dash);
+        bytes_arry[1] = reverseBits(_dash);
         number = -number;
     } else {
         digit = number / 10;
-        bytes_arry[3] = reverseBits(tm16_digits[digit]);
+        bytes_arry[2] = reverseBits(tm16_digits[digit]);
         number -= digit * 10;
     }
 
     digit = number;
-    bytes_arry[4] = reverseBits(tm16_digits[digit]);
+    bytes_arry[3] = reverseBits(tm16_digits[digit]);
     
     I2C_Start();
     I2C_Write_Byte(reverseBits(CS_DATA));  // cursor auto increment
     I2C_Stop();
     I2C_Start();
+    I2C_Write_Byte(reverseBits(CS_ADDRESS));
     I2C_Write_Bytes(bytes_arry, sizeof(bytes_arry));
     I2C_Stop();
 }
@@ -143,6 +144,7 @@ unsigned char tm1637ReadKeys(void)
     I2C_Start();
     I2C_Write_Byte(reverseBits(0x42));
     keys = I2C_Read_Byte();
+    I2C_Send_ACK();
     I2C_Stop();
     return keys;
 }
