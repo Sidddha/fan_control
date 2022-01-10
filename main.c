@@ -64,8 +64,8 @@ char AHT10_Temperature;
 char AHT10_Humidity;
 unsigned char AHT10_RX_Data[6];
 unsigned long AHT10_ADC_Raw;
-unsigned char AHT10_TmpHum_Cmd = 0xAC;
 
+#define AHT10_TmpHum_Cmd  0xAC
 #define AHT10_Adress 0x38 << 1
 
 static struct {
@@ -257,7 +257,7 @@ void main(void)
 {    
     setTMR0();                                    
     InitI2C();                                    // Initialize i2c pins
-    SetDisplay(7, 1);                             // Initialize display
+    SetDisplay(7, 1);
     temp_count = EEPROM_ReadByte(TEMP_ADDRESS);   // Restore previously set values 
     hum_count = EEPROM_ReadByte(HUM_ADDRESS);
     TRISB |= 0x0f;
@@ -265,7 +265,7 @@ void main(void)
 
 	while(1) 
 	{
-        if (measure_complete) 
+/*        if (measure_complete) 
         {   
             aht10_get();
             measure_delay = millis();
@@ -286,7 +286,7 @@ void main(void)
             AHT10_ADC_Raw = ((unsigned long)AHT10_RX_Data[1] << 16) | ((unsigned long)AHT10_RX_Data[2] << 8) | (AHT10_RX_Data[3] >> 4);
             AHT10_Humidity = (unsigned long)(AHT10_ADC_Raw/1048576);
             measure_complete = 1;
-        }
+        }*/
         
         current_key = keyHandle();
 		switch (current_key)
