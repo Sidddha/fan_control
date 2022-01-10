@@ -50,8 +50,8 @@ const unsigned char tm16_digits[0x10] = {
 
 static struct {
     unsigned char brightness;
-    bool state;
-} current = {1, 7};
+    _Bool state;
+} current = {7, 1};
 
 unsigned char reverseBits(unsigned char number) {
    number = (number & 0x55) << 1 | (number & 0xAA) >> 1;
@@ -61,13 +61,13 @@ unsigned char reverseBits(unsigned char number) {
    return number;
 }
 
-void SetDisplay(unsigned char brightness, bool state)
+void SetDisplay(unsigned char brightness, _Bool state)
 {
 
     Write_Command(reverseBits(CS_DISPLAY | brightness | state << BIT_DSS));
 }
 
-void tm1637DisplayDecimal(uint8_t number, bool dots)
+void tm1637DisplayDecimal(uint8_t number, _Bool dots)
 {
     unsigned char bytes_arry[5] = {0};
     unsigned char digit;
@@ -77,23 +77,27 @@ void tm1637DisplayDecimal(uint8_t number, bool dots)
     else if (number < -99)
         number = -99;
 
-    bytes_arry[0] = reverseBits(CS_ADDRESS | 0);
+    bytes_arry[0] = reverseBits(CS_ADDRESS);
     bytes_arry[1] = _empty;
 
     if (number < 0) {
-        bytes_arry[2] = _dash;
+        bytes_arry[2] = reverseBits(_dash);
         number = -number;
     } else {
         digit = number / 10;
-        bytes_arry[3] = tm16_digits[digit];
+        bytes_arry[3] = reverseBits(tm16_digits[digit]);
         number -= digit * 10;
     }
 
     digit = number;
-    bytes_arry[4] = tm16_digits[digit];
+    bytes_arry[4] = reverseBits(tm16_digits[digit]);
     
-    Write_Command(reverseBits(CS_DATA));  // cursor auto increment
+    I2C_Start();
+    I2C_Write_Byte(reverseBits(CS_DATA));  // cursor auto increment
+    I2C_Stop();
+    I2C_Start();
     I2C_Write_Bytes(bytes_arry, sizeof(bytes_arry));
+    I2C_Stop();
 }
 
 void tm1637DisplayContent(unsigned char content[4])
@@ -111,20 +115,20 @@ void tm1637DisplayContent(unsigned char content[4])
     I2C_Stop();
 }
 
-//void tm1637SetState(bool state)
+//void tm1637SetState(_Bool state)
 //{
 //    current.state = state;
 //    SetDisplay(current.brightness, current.state);
 //}
 
-//bool tm1637GetState(void)
+//_Bool tm1637GetState(void)
 //{
 //    return current.state;
 //}
 
 void tm1637SetBrightness(unsigned char brightness)
 {
-    current.brightness = reverseBits(brightness & 0x07);
+    current.brightness = brightness;
     SetDisplay(current.brightness, current.state);
 }
 
