@@ -44,8 +44,8 @@ unsigned char content[4] = {};
 unsigned char buttonCount = 0;
 char temp_treshold;
 char hum_treshold;
-char temp_count; //= EEPROM_ReadByte(TEMP_ADDRESS);
-char hum_count; // = EEPROM_ReadByte(HUM_ADDRESS);
+char temp_count; 
+char hum_count; 
 
 unsigned char current_state;
 _Bool inlet_fan_state = false;
