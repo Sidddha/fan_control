@@ -90,7 +90,7 @@ enum TM1637_letters {
  */
 extern const unsigned char tm16_digits[0x10];
 
-void SetDisplay(unsigned char brightness, bool state);
+void SetDisplay(unsigned char brightness, _Bool state);
 
 /* Display some user content(unsigned char[4]) on the segments.
  * Example:
@@ -101,14 +101,14 @@ void tm1637DisplayContent(unsigned char content[4]);
 
 /* Display a decimal number (-999..9999) on the segments
  * displaying dots(1) or not(0). */
-void tm1637DisplayDecimal(uint8_t number, bool dots);
+void tm1637DisplayDecimal(uint8_t number, _Bool dots);
 
 
 /* Set the display state on(1) or off(0). */
-void tm1637SetState(bool state);
+void tm1637SetState(_Bool state);
 
 /* Get the display state (on(1) or off(0)). */
-//bool tm1637GetState(void);
+//_Bool tm1637GetState(void);
 
 /* Set the segments brightness(0..7).
  * Side effect: if the display was turned off then it turns on. */
